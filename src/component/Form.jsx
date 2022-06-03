@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { getDatabase, ref, set  } from "firebase/database";
+import React, { useRef, useState } from 'react';
+import { getDatabase, ref, set, update  } from "firebase/database";
 import FormSection from './Section';
 import firebaseAPP from '../services/firebase';
 import "./Form.css";
+import Loader from './Loader';
 
 
 const GetRandomNum = () => {
@@ -16,6 +17,8 @@ const Form = (props) => {
     let { title } = props;
     let [ sections, setSections ] = useState([GetRandomNum()]);
     let [ formData, setFormData ] = useState({})
+    let [ loaderDisplay, setLoaderDisplay ] = useState(false);
+    let conscentRef = useRef(null);
 
     const IncrementSections = e => {
         e.preventDefault();
@@ -24,15 +27,17 @@ const Form = (props) => {
         setSections(copySections);
     }
     const RemoveSection = (e, id) => {
-        let copySections = [...sections];
-        const index = copySections.indexOf(id);
-        copySections.splice(index, 1)
-        setSections(copySections)
-
-        // remove section data
-        let copyFormData = {...formData};
-        delete copyFormData.members[id];
-        setFormData(copyFormData)
+        if(sections.length > 1) {
+            let copySections = [...sections];
+            const index = copySections.indexOf(id);
+            copySections.splice(index, 1)
+            setSections(copySections)
+    
+            // remove section data
+            let copyFormData = {...formData};
+            delete copyFormData.members[id];
+            setFormData(copyFormData)
+        }
     }
     const InputOnBlurHandler = (e) => {
         e.preventDefault();
@@ -62,19 +67,36 @@ const Form = (props) => {
         setFormData(copyFormData)
     }
 
+    const OnCheckHandler = (e) => {
+        let DOM = e.target,
+            { name } = DOM.dataset,
+            copyFormData = {...formData};
+
+        copyFormData[name] = DOM.checked;
+        setFormData(copyFormData)
+    }
+
     const FormSubmit = async e => {
         e.preventDefault();
-        const db = getDatabase(firebaseAPP);
-        const obj = {};
-        obj[`${GetRandomNum()}-${formData.familyName}`] = formData;
-        const pushResponse = await set(ref(db, "censusForm/"), obj);
-        console.log(pushResponse)
+        if(conscentRef.current.checked && formData.familyName) {
+            const db = getDatabase(firebaseAPP);
+            const obj = {};
+            obj[`${GetRandomNum()}-${formData.familyName}`] = formData;
+
+            setLoaderDisplay(true);
+            setTimeout( () => {
+                // document.location.reload(true)
+                setLoaderDisplay(false);
+            }, 1500)
+            const pushResponse = await update(ref(db, "censusForm/"), obj);
+
+        }
     }
 
     return (
         <form onSubmit={FormSubmit} action="#">
             <div className='form-header container'>
-                <h2 className='display-5'>{title}</h2>
+                <h2>{title}</h2>
                 <div className='row justify-content-center'>
                     <div className="mb-3 col-sm col-md-4">
                         <select onChange={SelectChangeHandler} className="form-select" name="parish">
@@ -134,6 +156,13 @@ const Form = (props) => {
                 </div>
             </div>
             <div className='form-body container'>
+                <p><u>Survey description</u></p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed laoreet augue, sed pulvinar ante. Vestibulum vestibulum leo non felis tempus, in faucibus est semper. Praesent auctor vitae velit quis sagittis. Nulla nibh augue, porta eu interdum quis, ornare nec sem. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
+                </p>
+            </div>
+
+            <div className='form-body container'>
                 <p>Details of family living at the same address</p>
                 { 
                     sections.map(section => {
@@ -142,6 +171,7 @@ const Form = (props) => {
                             <FormSection 
                                 key={id}
                                 id={id} 
+                                displayRemoveCta={sections.length > 1}
                                 RemoveSection={ e => RemoveSection(e, id)}
                                 UpdateSectionData={ UpdateSectionData }
                             />
@@ -150,8 +180,8 @@ const Form = (props) => {
                 }
                 <div className='form-conscent container row justify-content-center'>
                     <div className="form-check mb-3 col-sm-8">
-                        <input type="checkbox" id="conditions" data-name="gaveConscent" className="form-check-input"/>
-                        <label htmlFor="conditions" className="form-check-label">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dui arcu, accumsan et tellus a, sollicitudin pellentesque mauris. Etiam cursus, ex sit amet vehicula eleifend, mi nunc blandit nisl, nec aliquet purus velit eu purus.</label>
+                        <input onClick={OnCheckHandler} ref={conscentRef} type="checkbox" id="conditions" data-name="gaveConscent" className="form-check-input"/>
+                        <label htmlFor="conditions" className="form-check-label">I hereby conscent that these personal data may be collected and be used by the Anglican Diocese of Mauritius.</label>
                     </div>
                 </div>
                 <div className="form-buttons">
@@ -163,6 +193,7 @@ const Form = (props) => {
                     </div>
                 </div>
             </div>
+            <Loader display={loaderDisplay} />
         </form>
     );
 }

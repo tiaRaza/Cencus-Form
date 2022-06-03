@@ -2,10 +2,9 @@ import React, { useRef, useState } from 'react';
 import "./Section.css";
 
 const FormSection = (props) => {
-    let { id, RemoveSection, UpdateSectionData } = props;
+    let { id, RemoveSection, UpdateSectionData, displayRemoveCta } = props;
     let [ sectionData, setSectionData ] = useState({});
-    let otherMinistryRef = useRef(null)
-    let otherFrequency = useRef(null)
+    let otherMinistryRef = useRef(null);
 
     const OnBlurHandler = (e) => {
         let DOM = e.target,
@@ -17,6 +16,27 @@ const FormSection = (props) => {
             setSectionData(copySectionData);
             UpdateSectionData(id, copySectionData)
         }
+    }
+
+    const OnSelectChangeHandler = e => {
+        e.preventDefault();
+        const value = e.target.value;
+        if(value !== "-1") {
+            const copySectionData = {...sectionData};
+
+            copySectionData[e.target.getAttribute('name')] = value;
+            setSectionData(copySectionData);
+            UpdateSectionData(id, copySectionData)
+        }
+    }
+
+    const OnRadioChange = e => {
+        const { value, name } = e.target.dataset,
+            copySectionData = {...sectionData};
+
+        copySectionData[name] = value;
+        setSectionData(copySectionData);
+        UpdateSectionData(id, copySectionData);
     }
 
     const OnCheckHandler = (e) => {
@@ -33,13 +53,12 @@ const FormSection = (props) => {
         <div className='form-section row bg-secondary' >
             <div className='section-left col-md-8'>
                 <div className='section-top row'>
-                    <p className="section-title">Ministry currently involved in</p>
                     <div className="mb-3 col-sm col-md-6">
                         <input className="form-control" onBlur={OnBlurHandler} type="text" placeholder="Family Member's Name" data-name="memberName"/>
                     </div>
                     <div className="mb-3 col-sm col-md-2">
-                        <select className="form-select" >
-                            <option value="-1">Select Your Parish</option>
+                        <select onChange={OnSelectChangeHandler} className="form-select" name="ageGroup">
+                            <option value="-1">Select Your Age Group</option>
                             <option value="0-5">0-5</option>
                             <option value="6-12">6-12</option>
                             <option value="13-18">13-18</option>
@@ -60,7 +79,7 @@ const FormSection = (props) => {
                 </div>
 
                 <div className='section-top row'>
-                    <p className="section-title">Ministry currently involved in</p>
+                    <p className="section-title">Ministry currently involved in:</p>
                     <div className='col-sm col-md-3'>
                         <div className="form-check mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-sunday-check`} data-name="isSundaySchool" className='form-check-input'/>
@@ -121,35 +140,32 @@ const FormSection = (props) => {
                             : null
                         }
                     </div>
+                    <div className='section-info'>
+                        <p><em><u>Note</u>
+                        <br /><br /><strong>AV Team:</strong> Sound system, PowerPoint, Videographer</em></p>
+                    </div>
                 </div>
             </div>
             <div className='section-right  col-md-4'>
                 <p className="section-title">How often do you attend church?</p>
                 <div className="form-check mb-3">
-                    <input name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-one-week-check`}/>
+                    <input onChange={OnRadioChange} data-name="churchFrequency" data-value="Once Week" name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-one-week-check`}/>
                     <label className='form-check-label' htmlFor={`${id}-one-week-check`}>Once a week</label>
                 </div>
-                
                 <div className="form-check mb-3">
-                    <input name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-one-month-check`} />
+                    <input onChange={OnRadioChange} data-name="churchFrequency" data-value="Once Month" name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-one-month-check`} />
                     <label className='form-check-label' htmlFor={`${id}-one-month-check`}>Once a month</label>
                 </div>
-                
                 <div className="form-check mb-3">
-                    <input name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-occasionally-check`} />
+                    <input onChange={OnRadioChange} data-name="churchFrequency" data-value="Occasionally" name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-occasionally-check`} />
                     <label className='form-check-label' htmlFor={`${id}-occasionally-check`}>Occasionally</label>
                 </div>
-                
                 <div className="form-check mb-3">
-                    <input name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-never-check`} />
+                    <input onChange={OnRadioChange} data-name="churchFrequency" data-value="Never" name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-never-check`} />
                     <label className='form-check-label' htmlFor={`${id}-never-check`}>Never</label>
                 </div>
             </div>
-            <div className='section-info'>
-                <p><em><u>Note</u>
-                <br /><br /><strong>AV Team:</strong> Sound system, PowerPoint, Videographer</em></p>
-            </div>
-            <div className='section-cta'>
+            <div className={`section-cta ${displayRemoveCta ? '' : 'hidden'}`}>
                 <button type='button' className="btn btn-danger" onClick={RemoveSection}>Remove Member</button>
             </div>
         </div>
