@@ -1,0 +1,13 @@
+.form-header {}
+
+.form-body {
+    color: white;
+}
+.form-body label {
+    /* font-size: 20px; */
+}
+
+.form-buttons {
+    width: 100%;
+    justify-content: center;
+}

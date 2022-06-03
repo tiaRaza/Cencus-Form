@@ -1,0 +1,22 @@
+.form-section {
+    display: flex;
+    margin: 20px 0;
+    padding: 20px 0;
+}
+
+.section-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.section-left .section-top {
+    width: 100%;
+}
+
+.section-cta {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.section-right {}

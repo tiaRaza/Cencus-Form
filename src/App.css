@@ -3,7 +3,12 @@
 }
 
 body {
-  background-color: #282c34;
+  background-color: #282c34 !important;
+}
+
+.App {
+  font-size: 22px;
+  color: white;
 }
 
 .App-header {
@@ -13,7 +18,6 @@ body {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { getDatabase, ref, set  } from "firebase/database";
 import FormSection from './Section';
 import firebaseAPP from '../services/firebase';
+import "./Form.css";
 
 
 const GetRandomNum = () => {
@@ -48,30 +49,55 @@ const Form = (props) => {
 
     return (
         <form onSubmit={FormSubmit} action="#">
-            <div className='form-header'>
+            <div className='form-header container'>
                 <h2>{title}</h2>
-                <input type="text" placeholder='Family Name' />
-                <input type="text" placeholder='Address' />
-                <input type="text" placeholder='Telephone' />
-                <input type="text" placeholder='Mobile' />
+                <div className='row'>
+                    <div className='form-group col-sm col-md-6'>
+                        <div className='mb-3'>
+                            <label for="familyName" class="form-label">Family Name</label>
+                            <input id="familyName" name="familyName" class="form-control" type="text" placeholder='Family Name' />
+                        </div>
+                        <div className='mb-3'>
+                            <label for="address" class="form-label">Address</label>
+                            <input id="address" name="address" class="form-control" type="text" placeholder='Address' />
+                        </div>
+                    </div>
+                    <div className='form-group col-sm col-md-6'>
+                        <div className='mb-3'>
+                            <label for="telephone" class="form-label">Telephone (Home)</label>
+                            <input id="telephone" name="telephone" class="form-control" type="text" placeholder='Telephone' />
+                        </div>
+                        <div className='mb-3'>
+                            <label for="mobile" class="form-label">Mobile</label>
+                            <input id="mobile" name="mobile" class="form-control" type="text" placeholder='Mobile' />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className='form-body'>
-            { 
-                sections.map(section => {
-                    let id = section;
-                    return (
-                        <FormSection 
-                            key={id}
-                            id={id} 
-                            RemoveSection={ e => RemoveSection(e, id)}
-                            UpdateSectionData={ UpdateSectionData }
-                        />
-                    );
-                })
-            }
-                <button type='button' onClick={IncrementSections}>ADD MEMBER</button>
+            <div className='form-body container'>
+                <p>Details of family living at the same address</p>
+                { 
+                    sections.map(section => {
+                        let id = section;
+                        return (
+                            <FormSection 
+                                key={id}
+                                id={id} 
+                                RemoveSection={ e => RemoveSection(e, id)}
+                                UpdateSectionData={ UpdateSectionData }
+                            />
+                        );
+                    })
+                }
+                <div className="form-buttons">
+                    <div className="col-sm-3 mb-3">
+                        <button className="btn btn-primary" type='button' onClick={IncrementSections}>ADD ANOTHER MEMBER</button>
+                    </div>
+                    <div className="col-sm-3 mb-3">
+                        <button className="btn btn-success" type="submit">SUBMIT</button>
+                    </div>
+                </div>
             </div>
-            <button type="submit">SUBMIT</button>
         </form>
     );
 }
