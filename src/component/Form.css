@@ -3,6 +3,11 @@
 .form-body {
     color: white;
 }
+
+.form-body p {
+    text-align: left;
+}
+
 .form-body label {
     /* font-size: 20px; */
 }
@@ -11,4 +16,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+.form-conscent label {
+    font-size: 16px;
 }

@@ -33,12 +33,13 @@ const FormSection = (props) => {
         <div className='form-section row bg-secondary' >
             <div className='section-left col-md-8'>
                 <div className='section-top row'>
+                    <p className="section-title">Ministry currently involved in</p>
                     <div className="mb-3 col-sm col-md-6">
-                        <input className="form-control" onBlur={OnBlurHandler} type="text" placeholder='Name of member' data-name="MemberName"/>
+                        <input className="form-control" onBlur={OnBlurHandler} type="text" placeholder="Family Member's Name" data-name="memberName"/>
                     </div>
                     <div className="mb-3 col-sm col-md-2">
                         <select className="form-select" >
-                            <option value="-1">Select Age Group</option>
+                            <option value="-1">Select Your Parish</option>
                             <option value="0-5">0-5</option>
                             <option value="6-12">6-12</option>
                             <option value="13-18">13-18</option>
@@ -47,11 +48,11 @@ const FormSection = (props) => {
                         </select>
                     </div>
                     <div className='col-sm col-md-2'>
-                        <div className="form-check mb-3">
+                        <div className="form-check form-switch mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-anglican-check`} data-name="isAnglican" className="form-check-input"/>
                             <label htmlFor={`${id}-anglican-check`} className="form-check-label">Anglican</label>
                         </div>
-                        <div className="form-check mb-3">
+                        <div className="form-check form-switch mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-baptized-check`} data-name="isBaptized" className="form-check-input"/>
                             <label htmlFor={`${id}-baptized-check`} className="form-check-label">Baptized</label>
                         </div>
@@ -59,6 +60,7 @@ const FormSection = (props) => {
                 </div>
 
                 <div className='section-top row'>
+                    <p className="section-title">Ministry currently involved in</p>
                     <div className='col-sm col-md-3'>
                         <div className="form-check mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-sunday-check`} data-name="isSundaySchool" className='form-check-input'/>
@@ -114,36 +116,38 @@ const FormSection = (props) => {
                             <label className='form-check-label' htmlFor={`${id}-other-ministry-check`}>Other</label>
                         </div>
                         {
-                            otherMinistryRef.checked ?
-                            <input className="form-control" type="text" placeholder="Please specify" /> : null
+                            !!otherMinistryRef.current && otherMinistryRef.current.checked ?
+                            <textarea onBlur={OnBlurHandler} className="form-control" type="text" placeholder="Please specify" data-name="otherMinistries"/>
+                            : null
                         }
                     </div>
                 </div>
             </div>
             <div className='section-right  col-md-4'>
+                <p className="section-title">How often do you attend church?</p>
                 <div className="form-check mb-3">
-                    <input className='form-check-input' type="checkbox" id={`${id}-one-week-check`} />
+                    <input name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-one-week-check`}/>
                     <label className='form-check-label' htmlFor={`${id}-one-week-check`}>Once a week</label>
                 </div>
                 
                 <div className="form-check mb-3">
-                    <input className='form-check-input' type="checkbox" id={`${id}-one-month-check`} />
+                    <input name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-one-month-check`} />
                     <label className='form-check-label' htmlFor={`${id}-one-month-check`}>Once a month</label>
                 </div>
                 
                 <div className="form-check mb-3">
-                    <input className='form-check-input' type="checkbox" id={`${id}-never-check`} />
-                    <label className='form-check-label' htmlFor={`${id}-never-check`}>Never</label>
+                    <input name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-occasionally-check`} />
+                    <label className='form-check-label' htmlFor={`${id}-occasionally-check`}>Occasionally</label>
                 </div>
                 
                 <div className="form-check mb-3">
-                    <input ref={otherFrequency} className='form-check-input' type="checkbox" id={`${id}-other-check`} />
-                    <label className='form-check-label' htmlFor={`${id}-other-check`}>Other</label>
+                    <input name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-never-check`} />
+                    <label className='form-check-label' htmlFor={`${id}-never-check`}>Never</label>
                 </div>
-                {
-                    otherFrequency.checked ?
-                    <input className="form-control" type="text" placeholder="Please specify" /> : null
-                }
+            </div>
+            <div className='section-info'>
+                <p><em><u>Note</u>
+                <br /><br /><strong>AV Team:</strong> Sound system, PowerPoint, Videographer</em></p>
             </div>
             <div className='section-cta'>
                 <button type='button' className="btn btn-danger" onClick={RemoveSection}>Remove Member</button>

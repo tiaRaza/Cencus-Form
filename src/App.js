@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img />
-        <h1> Anglican Diocese of Mauritius</h1>
+        <h1 className='display-3'> Anglican Diocese of Mauritius</h1>
         </header>
         <Form title="Census Form"/>
     </div>

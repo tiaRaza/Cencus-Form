@@ -11,7 +11,20 @@
 }
 
 .section-left .section-top {
-    width: 100%;
+    margin-bottom: 30px;
+}
+
+@media only screen and (min-width: 992px) {
+    .section-left .section-top {
+        width: 100%;
+        margin-bottom: 0;
+    }
+}
+
+.section-info p {
+    font-size: 12px;
+    line-height: 12px;
+    margin-bottom: 10px;
 }
 
 .section-cta {
