@@ -67,8 +67,15 @@ const formUtils = () => {
         requiredInputs.forEach(input => {
             validatedDOMS.push(ValidateRequired(input))
         });
-        validatedDOMS.forEach(item => {
-            if(!item.valid) validCount++;
+        validatedDOMS.forEach((item, index) => {
+            if(!item.valid) {
+                if(validCount == 0) {
+                    item.DOM.focus()
+                }
+
+                validCount++;
+            }
+
             DisplayError(item)
         });
 
