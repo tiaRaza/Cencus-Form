@@ -15,14 +15,17 @@
     text-align: left;
 }
 
-.form-body label {
-    /* font-size: 20px; */
-}
-
 .form-buttons {
     width: 100%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+}
+
+@media only screen and (min-width: 700px) {
+    .form-buttons {
+        flex-direction: row;
+    }
 }
 
 .form-conscent label {

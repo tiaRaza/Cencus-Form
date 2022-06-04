@@ -4,6 +4,8 @@ import FormSection from './Section';
 import firebaseAPP from '../services/firebase';
 import "./Form.css";
 import Loader from './Loader';
+import Modal from './Modal';
+import FormUtils from '../form-utils/utils';
 
 
 const GetRandomNum = () => {
@@ -18,7 +20,19 @@ const Form = (props) => {
     let [ sections, setSections ] = useState([GetRandomNum()]);
     let [ formData, setFormData ] = useState({})
     let [ loaderDisplay, setLoaderDisplay ] = useState(false);
+    let [ modalDisplay, setModalDisplay ] = useState(false);
+    let [ errorDisplay, setErrorDisplay ] = useState(false);
     let conscentRef = useRef(null);
+    let formRef = useRef(null);
+
+    const PreventScroll = (display) => {
+        let DOC = document.querySelector("html");
+        if(display) {
+            DOC.style.overflow = "hidden"
+        } else {
+            DOC.style.overflow = ""
+        }
+    }
 
     const IncrementSections = e => {
         e.preventDefault();
@@ -46,17 +60,38 @@ const Form = (props) => {
             copyFormData = {...formData};
 
         if(e.target.value.length > 0) {
+            if(DOM.getAttribute("data-is-required")) {
+                DOM.classList.add("is-valid");
+                DOM.classList.remove("is-invalid");
+            }
+
             copyFormData[name] = e.target.value
             setFormData(copyFormData)
+        } else {
+            if(DOM.getAttribute("data-is-required")) {
+                DOM.classList.remove("is-valid")
+                DOM.classList.add("is-invalid")
+            }
         }
     }
 
     const SelectChangeHandler = e => {
         e.preventDefault()
-        const value = e.target.value;
+        const DOM = e.target,
+                value = DOM.value;
         if(value !== "-1") {
+            if(DOM.getAttribute("data-is-required")) {
+                DOM.classList.add("is-valid");
+                DOM.classList.remove("is-invalid");
+            }
+
             const copyFormData = {...formData};
-            copyFormData[e.target.getAttribute("name")] = e.target.value
+            copyFormData[DOM.getAttribute("name")] = value;
+        } else {
+            if(DOM.getAttribute("data-is-required")) {
+                DOM.classList.remove("is-valid")
+                DOM.classList.add("is-invalid")
+            }
         }
     }
 
@@ -73,33 +108,74 @@ const Form = (props) => {
             copyFormData = {...formData};
 
         copyFormData[name] = DOM.checked;
+        if(DOM.checked) {
+            if(DOM.getAttribute("data-is-required")) {
+                DOM.classList.add("is-valid");
+                DOM.classList.remove("is-invalid");
+            }
+        } else {
+            if(DOM.getAttribute("data-is-required")) {
+                DOM.classList.remove("is-valid")
+                DOM.classList.add("is-invalid")
+            }
+        }
         setFormData(copyFormData)
+    }
+
+    const CloseModal = (id, isOpen) => {
+        switch (id) {
+            case "thank-you":
+                setModalDisplay(isOpen);
+                PreventScroll(isOpen);
+                break;
+        
+            case "error":
+                setErrorDisplay(isOpen);
+                PreventScroll(isOpen);
+                break;
+            default:
+                break;
+        }
     }
 
     const FormSubmit = async e => {
         e.preventDefault();
-        if(conscentRef.current.checked && formData.familyName) {
+        let valid = FormUtils.ValidateForm(formRef.current);
+
+        if(valid) {
             const db = getDatabase(firebaseAPP);
             const obj = {};
             obj[`${GetRandomNum()}-${formData.familyName}`] = formData;
 
             setLoaderDisplay(true);
-            setTimeout( () => {
-                // document.location.reload(true)
-                setLoaderDisplay(false);
-            }, 1500)
-            const pushResponse = await update(ref(db, "censusForm/"), obj);
+            PreventScroll(true);
 
+            try {
+                await update(ref(db, "censusForm/"), obj);
+
+                setTimeout( () => {
+                    setLoaderDisplay(false);
+                    PreventScroll(false);
+
+                    setModalDisplay(true);
+                    PreventScroll(true);
+
+                    FormUtils.ResetForm(formRef.current);
+                }, 1500)
+            } catch (e) {
+                setLoaderDisplay(false);
+                setErrorDisplay(true)
+            }
         }
     }
 
     return (
-        <form onSubmit={FormSubmit} action="#">
+        <form ref={formRef} onSubmit={FormSubmit} action="#">
             <div className='form-header container'>
                 <h2>{title}</h2>
                 <div className='row justify-content-center'>
                     <div className="mb-3 col-sm col-md-4">
-                        <select onChange={SelectChangeHandler} className="form-select" name="parish">
+                        <select data-is-required="true" type="select" onChange={SelectChangeHandler} className="form-select" name="parish">
                             <option value="-1">Select Your Parish</option>
                             <option value="La Cathédrale St James - Port Louis">La Cathédrale St James - Port Louis</option>
                             <option value="St Thomas - Beau-Bassin">St Thomas - Beau-Bassin</option>
@@ -129,7 +205,7 @@ const Form = (props) => {
                         <div className='mb-3 row'>
                             <label htmlFor="familyName" className="col-sm-4 form-label">Family Name</label>
                             <div className="col-sm-8">
-                                <input onBlur={InputOnBlurHandler} id="familyName" name="familyName" className="form-control" type="text" placeholder='Family Name' />
+                                <input data-is-required="true" onBlur={InputOnBlurHandler} id="familyName" name="familyName" className="form-control" type="text" placeholder='Family Name' />
                             </div>
                         </div>
                         <div className='mb-3 row'>
@@ -180,8 +256,8 @@ const Form = (props) => {
                 }
                 <div className='form-conscent container row justify-content-center'>
                     <div className="form-check mb-3 col-sm-8">
-                        <input onClick={OnCheckHandler} ref={conscentRef} type="checkbox" id="conditions" data-name="gaveConscent" className="form-check-input"/>
-                        <label htmlFor="conditions" className="form-check-label">I hereby conscent that these personal data may be collected and be used by the Anglican Diocese of Mauritius.</label>
+                        <input data-is-required="true" onClick={OnCheckHandler} ref={conscentRef} type="checkbox" id="conditions" data-name="gaveConscent" className="form-check-input"/>
+                        <label htmlFor="conditions" className="form-check-label">I hereby conscent that these personal data may be collected and used by the <strong>Anglican Diocese of Mauritius</strong>.</label>
                     </div>
                 </div>
                 <div className="form-buttons">
@@ -193,7 +269,30 @@ const Form = (props) => {
                     </div>
                 </div>
             </div>
-            <Loader display={loaderDisplay} />
+            {
+                loaderDisplay ?
+                <Loader display={loaderDisplay} /> : null
+            }
+
+            {
+                modalDisplay ?
+                <Modal 
+                    id="thank-you"
+                    title="Thank You"
+                    display={modalDisplay}
+                    hideModal={CloseModal}
+                    message="Thank you for taking the time to complete the form and submitting it back to us." /> : null
+            }
+
+            {
+                errorDisplay ?
+                <Modal 
+                    id="error"
+                    title="An Error Occurred"
+                    display={errorDisplay}
+                    hideModal={CloseModal}
+                    message="Please submit form again, an error has occurred" /> : null
+            }
         </form>
     );
 }

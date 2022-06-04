@@ -13,8 +13,18 @@ const FormSection = (props) => {
 
         copySectionData[name] = DOM.value;
         if(DOM.value.length > 0) {
+            if(DOM.getAttribute("data-is-required")) {
+                DOM.classList.add("is-valid");
+                DOM.classList.remove("is-invalid");
+            }
+
             setSectionData(copySectionData);
             UpdateSectionData(id, copySectionData)
+        } else {
+            if(DOM.getAttribute("data-is-required")) {
+                DOM.classList.remove("is-valid")
+                DOM.classList.add("is-invalid")
+            }
         }
     }
 
@@ -54,11 +64,11 @@ const FormSection = (props) => {
             <div className='section-left col-md-8'>
                 <div className='section-top row'>
                     <div className="mb-3 col-sm col-md-6">
-                        <input className="form-control" onBlur={OnBlurHandler} type="text" placeholder="Family Member's Name" data-name="memberName"/>
+                        <input data-is-required="true" className="form-control" onBlur={OnBlurHandler} type="text" placeholder="Family Member's Name" data-name="memberName"/>
                     </div>
-                    <div className="mb-3 col-sm col-md-2">
+                    <div className="mb-3 col-sm col-md-3">
                         <select onChange={OnSelectChangeHandler} className="form-select" name="ageGroup">
-                            <option value="-1">Select Your Age Group</option>
+                            <option value="-1">Age Group</option>
                             <option value="0-5">0-5</option>
                             <option value="6-12">6-12</option>
                             <option value="13-18">13-18</option>
@@ -66,7 +76,7 @@ const FormSection = (props) => {
                             <option value="> 50">> 50</option>
                         </select>
                     </div>
-                    <div className='col-sm col-md-2'>
+                    <div className='col-sm col-md-3'>
                         <div className="form-check form-switch mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-anglican-check`} data-name="isAnglican" className="form-check-input"/>
                             <label htmlFor={`${id}-anglican-check`} className="form-check-label">Anglican</label>
@@ -136,13 +146,14 @@ const FormSection = (props) => {
                         </div>
                         {
                             !!otherMinistryRef.current && otherMinistryRef.current.checked ?
-                            <textarea onBlur={OnBlurHandler} className="form-control" type="text" placeholder="Please specify" data-name="otherMinistries"/>
+                            <textarea data-is-required="true" onBlur={OnBlurHandler} className="form-control" type="text" placeholder="Please specify" data-name="otherMinistries"/>
                             : null
                         }
                     </div>
                     <div className='section-info'>
                         <p><em><u>Note</u>
-                        <br /><br /><strong>AV Team:</strong> Sound system, PowerPoint, Videographer</em></p>
+                        <br /><br /><strong>AV Team:</strong> Sound system, PowerPoint, Videographer
+                        <br /><br /><strong>Other:</strong> Please input comma separated values. e.g. "Ministry 1, Ministry 2"</em></p>
                     </div>
                 </div>
             </div>
