@@ -144,16 +144,15 @@ const FormSection = (props) => {
                             <input ref={otherMinistryRef} onClick={OnCheckHandler} type="checkbox" id={`${id}-other-ministry-check`} data-name="isOther" className='form-check-input'/>
                             <label className='form-check-label' htmlFor={`${id}-other-ministry-check`}>Other</label>
                         </div>
-                        {
+                        {/*
                             !!otherMinistryRef.current && otherMinistryRef.current.checked ?
                             <textarea data-is-required="true" onBlur={OnBlurHandler} className="form-control" type="text" placeholder="Please specify" data-name="otherMinistries"/>
                             : null
-                        }
+                        **/}
                     </div>
                     <div className='section-info'>
                         <p><em><u>Note</u>
-                        <br /><br /><strong>AV Team:</strong> Sound system, PowerPoint, Videographer
-                        <br /><br /><strong>Other:</strong> Please input comma separated values. e.g. "Ministry 1, Ministry 2"</em></p>
+                        <br /><br /><strong>AV Team:</strong> Sound system, PowerPoint, Videographer</em></p>
                     </div>
                 </div>
             </div>
