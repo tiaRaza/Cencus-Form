@@ -217,9 +217,9 @@ const Form = (props) => {
                     </div>
                     <div className='form-group col-sm col-md-6'>
                         <div className='mb-3 row'>
-                            <label htmlFor="telephone" className="col-sm-4 form-label">Telephone (Home)</label>
+                            <label htmlFor="telephone" className="col-sm-4 form-label">Telephone</label>
                             <div className="col-sm-8">
-                                <input onBlur={InputOnBlurHandler} id="telephone" name="telephone" className="form-control" type="text" placeholder='Telephone' />
+                                <input onBlur={InputOnBlurHandler} id="telephone" name="telephone" className="form-control" type="text" placeholder='Telephone (Home)' />
                             </div>
                         </div>
                         <div className='mb-3 row'>
@@ -261,10 +261,10 @@ const Form = (props) => {
                     </div>
                 </div>
                 <div className="form-buttons">
-                    <div className="col-sm-3 mb-3">
+                    <div className="col-sm col-lg-3 mb-3">
                         <button className="btn btn-primary" type='button' onClick={IncrementSections}>ADD ANOTHER MEMBER</button>
                     </div>
-                    <div className="col-sm-3 mb-3">
+                    <div className="col-sm col-lg-3 mb-3">
                         <button className="btn btn-success" type="submit">SUBMIT</button>
                     </div>
                 </div>

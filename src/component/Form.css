@@ -6,6 +6,17 @@
     margin-bottom: 30px;
 }
 
+
+@media only screen and (max-width: 768px) {
+    .form-header label {
+        display: none;
+    }
+
+    .form-header .col-sm-8 {
+        width: 100%;
+    }
+}
+
 .form-body {
     color: white;
     margin-top: 30px;

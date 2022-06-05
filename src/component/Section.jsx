@@ -63,10 +63,10 @@ const FormSection = (props) => {
         <div className='form-section row bg-secondary' >
             <div className='section-left col-md-8'>
                 <div className='section-top row'>
-                    <div className="mb-3 col-sm col-md-6">
+                    <div className="mb-3 col-sm col-md-6 col-lg-6">
                         <input data-is-required="true" className="form-control" onBlur={OnBlurHandler} type="text" placeholder="Family Member's Name" data-name="memberName"/>
                     </div>
-                    <div className="mb-3 col-sm col-md-3">
+                    <div className="mb-3 col-sm col-md-6 col-lg-3">
                         <select onChange={OnSelectChangeHandler} className="form-select" name="ageGroup">
                             <option value="-1">Age Group</option>
                             <option value="0-5">0-5</option>
@@ -76,12 +76,12 @@ const FormSection = (props) => {
                             <option value="> 50">> 50</option>
                         </select>
                     </div>
-                    <div className='col-sm col-md-3'>
-                        <div className="form-check mb-3">
+                    <div className='col-sm col-md-3 col-lg-3'>
+                        <div className="form-check col-lg mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-anglican-check`} data-name="isAnglican" className="form-check-input"/>
                             <label htmlFor={`${id}-anglican-check`} className="form-check-label">Anglican</label>
                         </div>
-                        <div className="form-check mb-3">
+                        <div className="form-check col-lg mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-baptized-check`} data-name="isBaptized" className="form-check-input"/>
                             <label htmlFor={`${id}-baptized-check`} className="form-check-label">Baptized</label>
                         </div>
@@ -90,7 +90,7 @@ const FormSection = (props) => {
 
                 <div className='section-top row'>
                     <p className="section-title">Ministry currently involved in:</p>
-                    <div className='col-sm col-md-3'>
+                    <div className='col-sm col-md-6 col-lg-3'>
                         <div className="form-check mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-sunday-check`} data-name="isSundaySchool" className='form-check-input'/>
                             <label className='form-check-label' htmlFor={`${id}-sunday-check`}>Sunday School</label>
@@ -105,7 +105,7 @@ const FormSection = (props) => {
                         </div>
                     </div>
 
-                    <div className='col-sm col-md-3'>
+                    <div className='col-sm col-md-6 col-lg-3'>
                         <div className="form-check mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-elder-check`} data-name="isElderly" className='form-check-input'/>
                             <label className='form-check-label' htmlFor={`${id}-elder-check`}>Elderly</label>
@@ -120,7 +120,7 @@ const FormSection = (props) => {
                         </div>
                     </div>
                     
-                    <div className='col-sm col-md-3'>
+                    <div className='col-sm col-md-6 col-lg-3'>
                         <div className="form-check mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-av-team-check`} data-name="isAVTeam" className='form-check-input'/>
                             <label className='form-check-label' htmlFor={`${id}-av-team-check`}>AV Team</label>
@@ -135,7 +135,7 @@ const FormSection = (props) => {
                         </div>
                     </div>
 
-                    <div className='col-sm col-md-3'>
+                    <div className='col-sm col-md-6 col-lg-3'>
                         <div className="form-check mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-cell-check`} data-name="isCellGroup" className='form-check-input'/>
                             <label className='form-check-label' htmlFor={`${id}-cell-check`}>Cell Group</label>
