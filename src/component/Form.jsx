@@ -18,7 +18,11 @@ const GetRandomNum = () => {
 const Form = (props) => {
     let { title } = props;
     let [ sections, setSections ] = useState([GetRandomNum()]);
-    let [ formData, setFormData ] = useState({})
+    let [ formData, setFormData ] = useState({
+        address: "",
+        telephone: "",
+        mobile: ""
+    })
     let [ loaderDisplay, setLoaderDisplay ] = useState(false);
     let [ modalDisplay, setModalDisplay ] = useState(false);
     let [ errorDisplay, setErrorDisplay ] = useState(false);
@@ -87,6 +91,7 @@ const Form = (props) => {
 
             const copyFormData = {...formData};
             copyFormData[DOM.getAttribute("name")] = value;
+            setFormData(copyFormData)
         } else {
             if(DOM.getAttribute("data-is-required")) {
                 DOM.classList.remove("is-valid")

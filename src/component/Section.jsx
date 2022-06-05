@@ -1,9 +1,25 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import "./Section.css";
 
 const FormSection = (props) => {
     let { id, RemoveSection, UpdateSectionData, displayRemoveCta } = props;
-    let [ sectionData, setSectionData ] = useState({});
+    let [ sectionData, setSectionData ] = useState({
+        ageGroup: "",
+        isAnglican: false,
+        isBaptized: false,
+        isSundaySchool: false,
+        isYouth: false,
+        isMU: false,
+        isElderly: false,
+        isWelcome: false,
+        isPrayer: false,
+        isAVTeam: false,
+        isCompassion: false,
+        isMusic: false,
+        isCellGroup: false,
+        isOtherMinistry: false,
+        churchFrequency: "null"
+    });
     let otherMinistryRef = useRef(null);
 
     const OnBlurHandler = (e) => {
@@ -58,6 +74,14 @@ const FormSection = (props) => {
         setSectionData(copySectionData);
         UpdateSectionData(id, copySectionData)
     }
+
+    useEffect( () => {
+        /**
+         * Setting default value to section
+         */
+        let copySectionData = {...sectionData};
+        UpdateSectionData(id, copySectionData);
+    }, [])
 
     return (
         <div className='form-section row bg-secondary' >
@@ -141,7 +165,7 @@ const FormSection = (props) => {
                             <label className='form-check-label' htmlFor={`${id}-cell-check`}>Cell Group</label>
                         </div>
                         <div className="form-check mb-3">
-                            <input ref={otherMinistryRef} onClick={OnCheckHandler} type="checkbox" id={`${id}-other-ministry-check`} data-name="isOther" className='form-check-input'/>
+                            <input ref={otherMinistryRef} onClick={OnCheckHandler} type="checkbox" id={`${id}-other-ministry-check`} data-name="isOtherMinistry" className='form-check-input'/>
                             <label className='form-check-label' htmlFor={`${id}-other-ministry-check`}>Other</label>
                         </div>
                         {/*
