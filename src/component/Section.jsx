@@ -77,11 +77,11 @@ const FormSection = (props) => {
                         </select>
                     </div>
                     <div className='col-sm col-md-3'>
-                        <div className="form-check form-switch mb-3">
+                        <div className="form-check mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-anglican-check`} data-name="isAnglican" className="form-check-input"/>
                             <label htmlFor={`${id}-anglican-check`} className="form-check-label">Anglican</label>
                         </div>
-                        <div className="form-check form-switch mb-3">
+                        <div className="form-check mb-3">
                             <input onClick={OnCheckHandler} type="checkbox" id={`${id}-baptized-check`} data-name="isBaptized" className="form-check-input"/>
                             <label htmlFor={`${id}-baptized-check`} className="form-check-label">Baptized</label>
                         </div>
