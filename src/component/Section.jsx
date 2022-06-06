@@ -93,10 +93,10 @@ const FormSection = (props) => {
                     <div className="mb-3 col-sm col-md-6 col-lg-3">
                         <select onChange={OnSelectChangeHandler} className="form-select" name="ageGroup">
                             <option value="-1">Age Group</option>
-                            <option value="0-5">0-5</option>
-                            <option value="6-12">6-12</option>
-                            <option value="13-18">13-18</option>
-                            <option value="19-50">19-50</option>
+                            <option value="< 6">< 6</option>
+                            <option value="> 6 & < 12">6-12</option>
+                            <option value="> 13 & < 18">13-18</option>
+                            <option value="> 19 & < 50">19-50</option>
                             <option value="> 50">> 50</option>
                         </select>
                     </div>

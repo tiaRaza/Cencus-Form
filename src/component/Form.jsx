@@ -28,6 +28,7 @@ const Form = (props) => {
     let [ errorDisplay, setErrorDisplay ] = useState(false);
     let conscentRef = useRef(null);
     let formRef = useRef(null);
+    let submitRef = useRef(null);
 
     const PreventScroll = (display) => {
         let DOC = document.querySelector("html");
@@ -148,6 +149,7 @@ const Form = (props) => {
         let valid = FormUtils.ValidateForm(formRef.current);
 
         if(valid) {
+            submitRef.current.disabled = true;
             const db = getDatabase(firebaseAPP);
             const obj = {};
             obj[`${GetRandomNum()}-${formData.familyName}`] = formData;
@@ -164,10 +166,12 @@ const Form = (props) => {
 
                     setModalDisplay(true);
                     PreventScroll(true);
-
+                    submitRef.current.disabled = false;
+                    
                     FormUtils.ResetForm(formRef.current);
                 }, 1500)
             } catch (e) {
+                submitRef.current.disabled = false;
                 setLoaderDisplay(false);
                 setErrorDisplay(true)
             }
@@ -270,7 +274,7 @@ const Form = (props) => {
                         <button className="btn btn-primary" type='button' onClick={IncrementSections}>ADD ANOTHER MEMBER</button>
                     </div>
                     <div className="col-sm col-lg-3 mb-3">
-                        <button className="btn btn-success" type="submit">SUBMIT</button>
+                        <button ref={submitRef} className="btn btn-success" type="submit">SUBMIT</button>
                     </div>
                 </div>
             </div>
