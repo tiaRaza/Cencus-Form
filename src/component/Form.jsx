@@ -169,8 +169,7 @@ const Form = (props) => {
                     setModalDisplay(true);
                     PreventScroll(true);
                     submitRef.current.disabled = false;
-                    
-                    // FormUtils.ResetForm(formRef.current);
+                    FormUtils.ResetForm(formRef.current);
                 }, 1500)
             } catch (e) {
                 submitRef.current.disabled = false;
