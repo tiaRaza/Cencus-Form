@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
-import { getDatabase, ref, set, update  } from "firebase/database";
+import { getDatabase, ref, update  } from "firebase/database";
 import FormSection from './Section';
 import firebaseAPP from '../services/firebase';
 import "./Form.css";
 import Loader from './Loader';
 import Modal from './Modal';
 import FormUtils from '../form-utils/utils';
+// import FileUtils from '../services/fileUtils';
 
 
 const GetRandomNum = () => {
@@ -16,7 +17,6 @@ const GetRandomNum = () => {
 }
 
 const Form = (props) => {
-    let { title } = props;
     let [ sections, setSections ] = useState([GetRandomNum()]);
     let [ formData, setFormData ] = useState({
         address: "",
@@ -152,13 +152,15 @@ const Form = (props) => {
             submitRef.current.disabled = true;
             const db = getDatabase(firebaseAPP);
             const obj = {};
-            obj[`${GetRandomNum()}-${formData.familyName}`] = formData;
+            const applicationID = `${GetRandomNum()}-${formData.familyName}`;
+            obj[applicationID] = formData;
 
             setLoaderDisplay(true);
             PreventScroll(true);
 
             try {
                 await update(ref(db, "censusForm/"), obj);
+                // FileUtils.WriteFile(applicationID, JSON.stringify(obj))
 
                 setTimeout( () => {
                     setLoaderDisplay(false);
@@ -168,12 +170,13 @@ const Form = (props) => {
                     PreventScroll(true);
                     submitRef.current.disabled = false;
                     
-                    FormUtils.ResetForm(formRef.current);
+                    // FormUtils.ResetForm(formRef.current);
                 }, 1500)
             } catch (e) {
                 submitRef.current.disabled = false;
                 setLoaderDisplay(false);
-                setErrorDisplay(true)
+                setErrorDisplay(true);
+                // FileUtils.WriteFile(applicationID, JSON.stringify(obj))
             }
         }
     }
@@ -181,9 +184,8 @@ const Form = (props) => {
     return (
         <form ref={formRef} onSubmit={FormSubmit} action="#">
             <div className='form-header container'>
-                <h2>{title}</h2>
                 <div className='row justify-content-center'>
-                    <div className="mb-3 col-sm col-md-4">
+                    <div className="mb-3 col-sm col-md-5">
                         <select data-is-required="true" type="select" onChange={SelectChangeHandler} className="form-select" name="parish">
                             <option value="-1">Select Your Parish</option>
                             <option value="La Cathédrale St James - Port Louis">La Cathédrale St James - Port Louis</option>
@@ -212,39 +214,45 @@ const Form = (props) => {
                 <div className='row'>
                     <div className='form-group col-sm col-md-6'>
                         <div className='mb-3 row'>
-                            <label htmlFor="familyName" className="col-sm-4 form-label">Family Name</label>
-                            <div className="col-sm-8">
+                            <label htmlFor="familyName" className="col-sm-5 form-label">Family Name</label>
+                            <div className="col-sm-7">
                                 <input data-is-required="true" onBlur={InputOnBlurHandler} id="familyName" name="familyName" className="form-control" type="text" placeholder='Family Name' />
                             </div>
                         </div>
                         <div className='mb-3 row'>
-                            <label htmlFor="address" className="col-sm-4 form-label">Address</label>
-                            <div className="col-sm-8">
+                            <label htmlFor="address" className="col-sm-5 form-label">Address</label>
+                            <div className="col-sm-7">
                                 <input onBlur={InputOnBlurHandler} id="address" name="address" className="form-control" type="text" placeholder='Address' />
                             </div>
                         </div>
                     </div>
                     <div className='form-group col-sm col-md-6'>
                         <div className='mb-3 row'>
-                            <label htmlFor="telephone" className="col-sm-4 form-label">Telephone</label>
-                            <div className="col-sm-8">
+                            <label htmlFor="telephone" className="col-sm-5 form-label">Telephone</label>
+                            <div className="col-sm-7">
                                 <input onBlur={InputOnBlurHandler} id="telephone" name="telephone" className="form-control" type="text" placeholder='Telephone (Home)' />
                             </div>
                         </div>
                         <div className='mb-3 row'>
-                            <label htmlFor="mobile" className="col-sm-4 form-label">Mobile</label>
-                            <div className="col-sm-8">
+                            <label htmlFor="mobile" className="col-sm-5 form-label">Mobile</label>
+                            <div className="col-sm-7">
                                 <input onBlur={InputOnBlurHandler} id="mobile" name="mobile" className="form-control" type="text" placeholder='Mobile' />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className='form-body container'>
-                <p><u>Survey description</u></p>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed laoreet augue, sed pulvinar ante. Vestibulum vestibulum leo non felis tempus, in faucibus est semper. Praesent auctor vitae velit quis sagittis. Nulla nibh augue, porta eu interdum quis, ornare nec sem. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
-                </p>
+            <div className='form-body container form-description'>
+                <p><u>Instructions for Census:</u></p>
+                <p><strong>Select Your Parish:</strong> Select the main parish where you attend church services.</p>
+                <p><strong>Family Name:</strong> Enter your family’s Surname. Please note that if you have multiple families with different family surnames living together in the household, then EACH family, with different surname, will have to fill in a separate form.</p>
+                <p><strong>Address:</strong> Enter your current household address.</p>
+                <p><strong>Mobile:</strong> Enter the mobile number of the head of the household. This will be the primary point of contact by the parish or diocese.</p>
+                <p><strong>Family Member’s Name:</strong> Enter the First Name of each member of the Family in the household.</p>
+                <p><strong>Anglican:</strong> Please tick if you currently attend church services in an Anglican parish.</p>
+                <p><strong>Baptized:</strong> Please tick if you have been baptized, whether in an Anglican, Catholic or other church denomination.</p>
+                <p><strong>Ministry currently involved in:</strong> Please tick all the ministries you are currently involved in your parish.</p>
+                <p><strong>Submit:</strong> Please click on the Submit button only when you have entered ALL the information for each member of the family.</p>
             </div>
 
             <div className='form-body container'>
@@ -266,7 +274,7 @@ const Form = (props) => {
                 <div className='form-conscent container row justify-content-center'>
                     <div className="form-check mb-3 col-sm-8">
                         <input data-is-required="true" onClick={OnCheckHandler} ref={conscentRef} type="checkbox" id="conditions" data-name="gaveConscent" className="form-check-input"/>
-                        <label htmlFor="conditions" className="form-check-label">I hereby conscent that these personal data may be collected and used by the <strong>Anglican Diocese of Mauritius</strong>.</label>
+                        <label htmlFor="conditions" className="form-check-label">I hereby agree to the data collected to be used by the <strong>Anglican Diocese of Mauritius</strong> in accordance with the <em>Data Protection Act 2017</em> of the Republic of Mauritius.</label>
                     </div>
                 </div>
                 <div className="form-buttons">

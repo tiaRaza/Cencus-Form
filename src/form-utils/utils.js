@@ -17,7 +17,6 @@ const formUtils = () => {
                         valid: true
                     }
                 }
-                break;
             case "text":
                 value = DOM.value.trim();
                 if(value.length < 1) {
@@ -31,7 +30,6 @@ const formUtils = () => {
                         valid: true
                     }
                 }
-                break;
             case "checkbox":
                 if(!DOM.checked) {
                     return {
@@ -43,9 +41,7 @@ const formUtils = () => {
                         DOM,
                         valid: true
                     }
-                }
-                break;
-        
+                }        
             default:
                 break;
         }
@@ -69,7 +65,7 @@ const formUtils = () => {
         });
         validatedDOMS.forEach((item, index) => {
             if(!item.valid) {
-                if(validCount == 0) {
+                if(validCount === 0) {
                     item.DOM.focus()
                 }
 

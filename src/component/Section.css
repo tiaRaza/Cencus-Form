@@ -1,7 +1,16 @@
 .form-section {
     display: flex;
+    position: relative;
     margin: 20px 0;
     padding: 20px 0;
+    color: white;
+    background-color: rgba(var(--bs-secondary-rgb), 0.8)!important;
+}
+
+@media only screen and (min-width: 1040px) {
+    .form-section {
+        position: unset;
+    }
 }
 
 .section-left {
@@ -38,4 +47,50 @@
 
 .hidden {
     display: none;
+}
+
+.deco-1 {
+    position: absolute;
+    top: 0;
+    left: -200px;
+    width: 400px;
+    z-index: -1;
+    max-width: unset;
+}
+
+.deco-2 {
+    position: absolute;
+    bottom: 10%;
+    right: -200px;
+    width: 400px;
+    z-index: -1;
+    max-width: unset;
+}
+
+@media only screen and (min-width: 767px) {
+    .deco-1 {
+        top: -25%;
+        left: -250px;
+        width: 400px;
+    }
+
+    .deco-2 {
+        bottom: -5%;
+        right: -220px;
+        width: 400px;
+    }
+}
+
+@media only screen and (min-width: 1040px) {
+    .deco-1 {
+        top: 25%;
+        left: -150px;
+        width: 30%;
+    }
+
+    .deco-2 {
+        bottom: -5%;
+        right: -100px;
+        width: 32%;
+    }
 }

@@ -6,10 +6,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img />
+        <img src="./logo1.png" alt="Dio Ang Logo"/>
         <h1 className='display-3'> Anglican Diocese of Mauritius</h1>
-        </header>
-        <Form title="Census Form"/>
+        <h2 className='display-6'>Census Form</h2>
+      </header>
+      <Form />
     </div>
   );
 }

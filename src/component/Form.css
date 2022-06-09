@@ -12,13 +12,12 @@
         display: none;
     }
 
-    .form-header .col-sm-8 {
+    .form-header .col-sm-7 {
         width: 100%;
     }
 }
 
 .form-body {
-    color: white;
     margin-top: 30px;
 }
 
@@ -41,4 +40,15 @@
 
 .form-conscent label {
     font-size: 16px;
+}
+
+.form-description p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+@media only screen and (min-width: 480px) { 
+    .form-description p {
+        font-size: 16px;
+    }
 }

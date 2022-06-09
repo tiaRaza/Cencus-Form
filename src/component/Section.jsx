@@ -84,7 +84,9 @@ const FormSection = (props) => {
     }, [])
 
     return (
-        <div className='form-section row bg-secondary' >
+        <div className='form-section row' >
+            <img className="deco-1" src="./circle.png" alt="Circle"/>
+            <img className="deco-2" src="./logo1.png" alt="Dio Ang Logo"/>
             <div className='section-left col-md-8'>
                 <div className='section-top row'>
                     <div className="mb-3 col-sm col-md-6 col-lg-6">
