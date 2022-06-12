@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getDatabase, ref, update  } from "firebase/database";
 import FormSection from './Section';
 import firebaseAPP from '../services/firebase';
@@ -6,6 +6,7 @@ import "./Form.css";
 import Loader from './Loader';
 import Modal from './Modal';
 import FormUtils from '../form-utils/utils';
+import ConfirmationModal from './Confirmation';
 // import FileUtils from '../services/fileUtils';
 
 
@@ -26,6 +27,11 @@ const Form = (props) => {
     let [ loaderDisplay, setLoaderDisplay ] = useState(false);
     let [ modalDisplay, setModalDisplay ] = useState(false);
     let [ errorDisplay, setErrorDisplay ] = useState(false);
+    let [ confirmDeleteDisplay, setConfirmDeleteDisplay ] = useState(false);
+    let [ confirmSubmitDisplay, setConfirmSubmitDisplay ] = useState(false);
+    let [ removeID, setRemoveID ] = useState("");
+    let [ proceedDelete, setProceedDelete ] = useState(false);
+    let [ proceedSubmit, setProceedSubmit ] = useState(false);
     let conscentRef = useRef(null);
     let formRef = useRef(null);
     let submitRef = useRef(null);
@@ -45,19 +51,7 @@ const Form = (props) => {
         copySections.push(GetRandomNum());
         setSections(copySections);
     }
-    const RemoveSection = (e, id) => {
-        if(sections.length > 1) {
-            let copySections = [...sections];
-            const index = copySections.indexOf(id);
-            copySections.splice(index, 1)
-            setSections(copySections)
-    
-            // remove section data
-            let copyFormData = {...formData};
-            delete copyFormData.members[id];
-            setFormData(copyFormData)
-        }
-    }
+
     const InputOnBlurHandler = (e) => {
         e.preventDefault();
         let DOM = e.target,
@@ -139,46 +133,95 @@ const Form = (props) => {
                 setErrorDisplay(isOpen);
                 PreventScroll(isOpen);
                 break;
+
+            case "confirmation-delete":
+                setConfirmDeleteDisplay(isOpen);
+                PreventScroll(isOpen);
+                break;
+
+            case "confirmation-submit":
+                setConfirmSubmitDisplay(isOpen);
+                PreventScroll(isOpen);
+                break;
             default:
                 break;
         }
     }
 
-    const FormSubmit = async e => {
+    const FormSubmit = e => {
         e.preventDefault();
         let valid = FormUtils.ValidateForm(formRef.current);
-
+        
         if(valid) {
-            submitRef.current.disabled = true;
-            const db = getDatabase(firebaseAPP);
-            const obj = {};
-            const applicationID = `${GetRandomNum()}-${formData.familyName}`;
-            obj[applicationID] = formData;
-
-            setLoaderDisplay(true);
+            setConfirmSubmitDisplay(true);
             PreventScroll(true);
-
-            try {
-                await update(ref(db, "censusForm/"), obj);
-                // FileUtils.WriteFile(applicationID, JSON.stringify(obj))
-
-                setTimeout( () => {
-                    setLoaderDisplay(false);
-                    PreventScroll(false);
-
-                    setModalDisplay(true);
-                    PreventScroll(true);
-                    submitRef.current.disabled = false;
-                    FormUtils.ResetForm(formRef.current);
-                }, 1500)
-            } catch (e) {
-                submitRef.current.disabled = false;
-                setLoaderDisplay(false);
-                setErrorDisplay(true);
-                // FileUtils.WriteFile(applicationID, JSON.stringify(obj))
-            }
         }
     }
+
+    useEffect( () => {
+        async function SubmitForm() {
+            if(proceedSubmit) {
+                submitRef.current.disabled = true;
+                const db = getDatabase(firebaseAPP);
+                const obj = {};
+                const applicationID = `${GetRandomNum()}-${formData.familyName}`;
+                obj[applicationID] = formData;
+    
+                setLoaderDisplay(true);
+                PreventScroll(true);
+    
+                try {
+                    // await update(ref(db, "censusForm/"), obj);
+                    // FileUtils.WriteFile(applicationID, JSON.stringify(obj))
+    
+                    setTimeout( () => {
+                        setLoaderDisplay(false);
+                        PreventScroll(false);
+    
+                        setModalDisplay(true);
+                        PreventScroll(true);
+                        submitRef.current.disabled = false;
+                        FormUtils.ResetForm(formRef.current);
+                        setProceedSubmit(false);
+
+                        /**
+                         * Remove additional sections
+                         */
+                        let copySections = [...sections];
+                        copySections.splice(1, copySections.length)
+                        setSections(copySections)
+
+                    }, 1500)
+                } catch (e) {
+                    submitRef.current.disabled = false;
+                    setLoaderDisplay(false);
+                    setErrorDisplay(true);
+                    // FileUtils.WriteFile(applicationID, JSON.stringify(obj))
+                }
+            }
+        }
+
+        SubmitForm();
+    }, [proceedSubmit])
+
+    useEffect(() => {
+        if(proceedDelete) {
+            var id = removeID;
+            if(sections.length > 1 && proceedDelete) {
+                setRemoveID("")
+                let copySections = [...sections];
+                const index = copySections.indexOf(id);
+                copySections.splice(index, 1)
+                setSections(copySections)
+                
+                // remove section data
+                let copyFormData = {...formData};
+                delete copyFormData.members[id];
+                setFormData(copyFormData)
+                setProceedDelete(false);
+            }
+        }
+    }, [proceedDelete]);
 
     return (
         <form ref={formRef} onSubmit={FormSubmit} action="#">
@@ -187,11 +230,11 @@ const Form = (props) => {
                     <div className="mb-3 col-sm col-md-5">
                         <select data-is-required="true" type="select" onChange={SelectChangeHandler} className="form-select" name="parish">
                             <option value="-1">Select Your Parish</option>
-                            <option value="La Cathédrale St James - Port Louis">La Cathédrale St James - Port Louis</option>
+                            <option value="La Cathedrale St James - Port Louis">La Cathédrale St James - Port Louis</option>
                             <option value="St Thomas - Beau-Bassin">St Thomas - Beau-Bassin</option>
-                            <option value="St John - Réduit">St John - Réduit</option>
+                            <option value="St John - Reduit">St John - Réduit</option>
                             <option value="St Paul - Vacoas">St Paul - Vacoas</option>
-                            <option value="Christ Church  - Mahébourg">Christ Church  - Mahébourg</option>
+                            <option value="Christ Church  - Mahebourg">Christ Church  - Mahébourg</option>
                             <option value="St Barnabas - Pamplemousses">St Barnabas - Pamplemousses</option>
                             <option value="St Peter  - Pailles, Cassis">St Peter  - Pailles, Cassis</option>
                             <option value="St Paul - Plaine Verte">St Paul - Plaine Verte</option>
@@ -264,7 +307,11 @@ const Form = (props) => {
                                 key={id}
                                 id={id} 
                                 displayRemoveCta={sections.length > 1}
-                                RemoveSection={ e => RemoveSection(e, id)}
+                                RemoveSection={ e => {
+                                    setConfirmDeleteDisplay(true);
+                                    PreventScroll(true);
+                                    setRemoveID(id);
+                                }}
                                 UpdateSectionData={ UpdateSectionData }
                             />
                         );
@@ -308,6 +355,28 @@ const Form = (props) => {
                     display={errorDisplay}
                     hideModal={CloseModal}
                     message="Please submit form again, an error has occurred" /> : null
+            }
+
+            {
+                confirmDeleteDisplay ?
+                <ConfirmationModal
+                    id="confirmation-delete"
+                    title="Remove Member"
+                    display={confirmDeleteDisplay}
+                    hideModal={CloseModal}
+                    actionProceed={ () => setProceedDelete(true) }
+                    message="You are about to remove a member of your family from the application. Do you want to proceed?" /> : null
+            }
+
+            {
+                confirmSubmitDisplay ?
+                <ConfirmationModal
+                    id="confirmation-submit"
+                    title="Submit Form"
+                    display={confirmSubmitDisplay}
+                    hideModal={CloseModal}
+                    actionProceed={ () => setProceedSubmit(true) }
+                    message="You are about to submit the form. Do you want to proceed?" /> : null
             }
         </form>
     );
