@@ -165,6 +165,7 @@ const Form = (props) => {
                 const db = getDatabase(firebaseAPP);
                 const obj = {};
                 const applicationID = `${GetRandomNum()}-${formData.familyName}`;
+                formData.origin = window.location.hostname;
                 formData.date = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`;
                 obj[applicationID] = formData;
     
