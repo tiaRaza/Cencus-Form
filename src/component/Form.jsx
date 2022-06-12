@@ -165,13 +165,14 @@ const Form = (props) => {
                 const db = getDatabase(firebaseAPP);
                 const obj = {};
                 const applicationID = `${GetRandomNum()}-${formData.familyName}`;
+                formData.date = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`;
                 obj[applicationID] = formData;
     
                 setLoaderDisplay(true);
                 PreventScroll(true);
     
                 try {
-                    // await update(ref(db, "censusForm/"), obj);
+                    await update(ref(db, "censusForm/"), obj);
                     // FileUtils.WriteFile(applicationID, JSON.stringify(obj))
     
                     setTimeout( () => {
