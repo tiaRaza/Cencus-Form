@@ -287,16 +287,20 @@ const Form = (props) => {
                 </div>
             </div>
             <div className='form-body container form-description'>
-                <p><u>Instructions for Census:</u></p>
-                <p><strong>Select Your Parish:</strong> Select the main parish where you attend church services.</p>
+                <p><u>Instructions for Anglican Diocese Census 2022:</u></p>
+                <p><strong>We would recommend that the head of the household be the one responsible for filling in the form for the family. The head of the household is usually the husband/father but can be the mother in case of a widow.</strong></p>
+                <p><strong>In cases whereby the child or children attend church services in an Anglican parish but the parents or one of the parents do NOT, the parent(s), as head of household, still need to fill in the form with their name(s) and select e.g. “Not Anglican” and “Never attend Anglican church services” for their specific situations.</strong></p>
+                <p><strong>If there are specific cases in your family whereby you are not sure how to fill in the form, please contact your parish census team for clarification.</strong></p>
+
+                <p><strong>Select Your Parish:</strong> Select the <strong>main</strong> parish where you attend church services.</p>
                 <p><strong>Family Name:</strong> Enter your family’s Surname. Please note that if you have multiple families with different family surnames living together in the household, then EACH family, with different surname, will have to fill in a separate form.</p>
                 <p><strong>Address:</strong> Enter your current household address.</p>
                 <p><strong>Mobile:</strong> Enter the mobile number of the head of the household. This will be the primary point of contact by the parish or diocese.</p>
-                <p><strong>Family Member’s Name:</strong> Enter the First Name of each member of the Family in the household.</p>
-                <p><strong>Anglican:</strong> Please tick if you currently attend church services in an Anglican parish.</p>
+                <p><strong>Family Member’s Name:</strong> Enter the First Name of each member of the Family in the household. If you have a family member who is a minor and has a different Surname from the entered Family Name, then enter that person’s First Name and include his/her Surname in brackets after the First Name.</p>
+                <p><strong>Anglican:</strong> Please tick if you currently attend church services in an Anglican parish (Note: You can be a Catholic, Adventist, etc. but for the purposes of this census, if you attend church services in an Anglican parish, then you are considered as an Anglican).</p>
                 <p><strong>Baptized:</strong> Please tick if you have been baptized, whether in an Anglican, Catholic or other church denomination.</p>
                 <p><strong>Ministry currently involved in:</strong> Please tick all the ministries you are currently involved in your parish.</p>
-                <p><strong>Submit:</strong> Please click on the Submit button only when you have entered ALL the information for each member of the family.</p>
+                <p><strong>Submit:</strong> Please click on the Submit button only when you have entered <strong>ALL</strong> the information for <strong>EACH</strong> member of the family. If when you click on the Submit button and nothing happens, it is most likely that you have not ticked the agreement for data use as per the Data Protection Act. Once you have successfully submitted your form, you will receive a confirmation pop-up. </p>
             </div>
 
             <div className='form-body container'>
@@ -378,7 +382,7 @@ const Form = (props) => {
                     display={confirmSubmitDisplay}
                     hideModal={CloseModal}
                     actionProceed={ () => setProceedSubmit(true) }
-                    message="You are about to submit the form. Do you want to proceed?" /> : null
+                    message="Make sure you have added ALL your family members BEFORE submitting. Do you want to proceed and Submit ?" /> : null
             }
         </form>
     );

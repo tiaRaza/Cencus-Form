@@ -90,7 +90,7 @@ const FormSection = (props) => {
             <div className='section-left col-md-8'>
                 <div className='section-top row'>
                     <div className="mb-3 col-sm col-md-6 col-lg-6">
-                        <input data-is-required="true" className="form-control" onBlur={OnBlurHandler} type="text" placeholder="Family Member's Name" data-name="memberName"/>
+                        <input data-is-required="true" className="form-control" onBlur={OnBlurHandler} type="text" placeholder="First Name of Family Member" data-name="memberName"/>
                     </div>
                     <div className="mb-3 col-sm col-md-6 col-lg-3">
                         <select onChange={OnSelectChangeHandler} className="form-select" name="ageGroup">
@@ -186,7 +186,7 @@ const FormSection = (props) => {
                 <p className="section-title">How often do you attend church?</p>
                 <div className="form-check mb-3">
                     <input onChange={OnRadioChange} data-name="churchFrequency" data-value="Once Week" name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-one-week-check`}/>
-                    <label className='form-check-label' htmlFor={`${id}-one-week-check`}>Once a week</label>
+                    <label className='form-check-label' htmlFor={`${id}-one-week-check`}>At least Once a week</label>
                 </div>
                 <div className="form-check mb-3">
                     <input onChange={OnRadioChange} data-name="churchFrequency" data-value="Once Month" name={`${id}-frequency`} className='form-check-input' type="radio" id={`${id}-one-month-check`} />
