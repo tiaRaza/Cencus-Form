@@ -177,6 +177,11 @@ const Form = (props) => {
                     // FileUtils.WriteFile(applicationID, JSON.stringify(obj))
     
                     setTimeout( () => {
+                        setFormData({
+                            address: "",
+                            telephone: "",
+                            mobile: ""
+                        });
                         setLoaderDisplay(false);
                         PreventScroll(false);
     
